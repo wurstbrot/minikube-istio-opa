@@ -1,0 +1,39 @@
+# Based on OPA Istio Tuturial
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin-with-opa
+  labels:
+    app: httpbin-with-opa
+    service: httpbin-with-opa
+spec:
+  ports:
+    - name: http
+      port: 80 # old: 9080
+#      targetPort: 80
+  selector:
+    app: httpbin-with-opa
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: httpbin-with-opa
+  labels:
+    app: httpbin-with-opa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin-with-opa
+  template:
+    metadata:
+      labels:
+        app: httpbin-with-opa
+    spec:
+      containers:
+        - image: docker.io/kennethreitz/httpbin
+          imagePullPolicy: IfNotPresent
+          name: httpbin-with-opa
+          ports:
+            - containerPort: 80 # OLD: 9080
